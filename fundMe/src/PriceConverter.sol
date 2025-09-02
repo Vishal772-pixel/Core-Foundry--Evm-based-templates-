@@ -1,22 +1,33 @@
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
 
-import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+//SPDX-License-Identifier:MIT
+pragma solidity ^0.8.20;
 
-library PriceConverter {
-    function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) {
-        (, int256 answer,,,) = priceFeed.latestRoundData();
-        // ETH/USD rate in 18 digit
-        return uint256(answer * 10000000000);
-    }
 
-    // 1000000000
-    // call it get fiatConversionRate, since it assumes something about decimals
-    // It wouldn't work for every aggregator
-    function getConversionRate(uint256 ethAmount, AggregatorV3Interface priceFeed) internal view returns (uint256) {
-        uint256 ethPrice = getPrice(priceFeed);
-        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1000000000000000000;
-        // the actual ETH/USD conversation rate, after adjusting the extra 0s.
-        return ethAmountInUsd;
-    }
+library PriceConverter{
+    import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+
+
+    function getPrice() internal view returns(uint256){
+    // to get latest price of anything from chainlink
+    AggregatorV3Interface priceFeed = AggregatorV3Interface(0x5eFA2952593dc7658F1E5e04E6D455f314086495);
+    // (uint256 roundId,uint256 price, uint256 startedAt, uint256 timestamps,uint80 answeredInRound)= priceFeed.latestRoundData();
+        (,int256 price, , ,)= priceFeed.latestRoundData();
+return  uint256 price * 1e10;// added a typecaster here
+
+}
+function getConversionRate(uint256 ethAmount) internal view  returns(uint256){
+    // 1 ETh ?
+    // 2000_000000000000000000
+    uint256 ethPrice = getPrice();
+    // (2000__00000000000000000 * 1_000000000000000000)/ 1e18
+    uint256 ethAmountInUsd = (ethPrice * ethamount)/1e18;
+    // so we will get 2000$ = 1 eth
+    return ethAmountInUsd;
+}
+
+function getVersion() internal view returns(uint256){
+    return AggregatorV3Interface(0x5eFA2952593dc7658F1E5e04E6D455f314086495).version();
+}
+
 }

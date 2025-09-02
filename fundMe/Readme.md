@@ -8,3 +8,20 @@
 Unit testing
 forge test --m testPriceFeedVersionIsAccurate 
 -vvv --fork-url $RPC_URL
+
+// to check how many line of  code is been tested yet 
+
+forge coverage --fork-url $RPC_URL
+
+
+
+docs.soliditylang.org/en/v0.8.1/units-and-global
+11:20:02
+
+docs.chain.link
+faucets.chain.link/kovan
+
+
+chainlink VRF for wherever randomness is  their ..lottery, randomnising NFTs
+
+Chainlink Automation , chainlink keepers
